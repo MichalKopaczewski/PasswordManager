@@ -1,10 +1,21 @@
+using MediatR;
+
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
+
+using PasswordManager.Infrastructure.Persistance;
+
+using System;
+using System.Reflection;
+using System.Text;
 
 namespace PasswordManager
 {
@@ -20,7 +31,39 @@ namespace PasswordManager
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllersWithViews();
+            services.AddHttpContextAccessor();
+            services.AddControllers()
+                .AddNewtonsoftJson()
+                ;
+            services.AddMediatR(Assembly.GetExecutingAssembly());
+
+
+            services.AddDbContext<PasswordManagerContext>(options =>
+            {
+                options.UseSqlServer(Configuration.GetConnectionString("PasswordManagerDB"));
+                options.EnableDetailedErrors(true);
+                options.EnableSensitiveDataLogging(true);
+            });
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(jwtBearerOptions =>
+           {
+               jwtBearerOptions.RequireHttpsMetadata = false;
+               jwtBearerOptions.SaveToken = true;
+               jwtBearerOptions.TokenValidationParameters = new Microsoft.IdentityModel.Tokens.TokenValidationParameters()
+               {
+                   ValidateIssuerSigningKey = true,
+                   IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration.GetSection("AppSettings:Token").Value)),
+                   ValidateLifetime = true,
+                   ClockSkew = TimeSpan.FromMinutes(1)
+               };
+           });
+            
+
+            services.AddSwaggerGen();
             // In production, the Angular files will be served from this directory
             services.AddSpaStaticFiles(configuration =>
             {
@@ -70,6 +113,12 @@ namespace PasswordManager
                     spa.UseAngularCliServer(npmScript: "start");
                 }
             });
+
+            // Enable middleware to serve generated Swagger as a JSON endpoint
+            app.UseSwagger();
+
+            // Enable middleware to serve swagger-ui assets (HTML, JS, CSS etc.)
+            app.UseSwaggerUI();
         }
     }
 }
