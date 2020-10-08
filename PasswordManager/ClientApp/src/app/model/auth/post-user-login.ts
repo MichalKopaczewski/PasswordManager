@@ -1,4 +1,4 @@
 export interface PostUserLogin {
-    login:string;
+    username:string;
     password:string;
 }

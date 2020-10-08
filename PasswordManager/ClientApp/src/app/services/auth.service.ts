@@ -1,20 +1,14 @@
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { NgxPermissionsService } from "ngx-permissions/lib/service/permissions.service";
-import { environment } from "src/environments/environment";
 import { AuthUserToken } from "../model/auth/auth-user-token";
 import { LocalStorageService } from "./local-storage-service";
 import { map, catchError } from 'rxjs/operators'
 import { Observable, Subject } from "rxjs";
 import { PostUserLogin } from "../model/auth/post-user-login";
 import { JwtHelperService } from "@auth0/angular-jwt";
+import { environment } from "src/environments/environment";
+import { NgxPermissionsService } from "ngx-permissions";
 
-export function tokenGetter(): string {
-    //return localStorageService.getFromLocalStorage<string>(LocalStorageService.TOKEN,'');
-    const token = localStorage.getItem("token");
-    if (token === null) return "";
-    return token.substring(1, token.length - 1);
-}
 
 @Injectable()
 export class AuthService {
@@ -59,13 +53,19 @@ export class AuthService {
         if (this.getUser() == null) {
             return;
         }
+        console.log(JSON.stringify(this.getUser()));
         if (this.getUser().role !== undefined) {
             if (!Array.isArray(this.getUser().role)) {
                 const roles = [this.getUser().role.toString()];
+                console.log(JSON.stringify(roles));
                 this.permissionsService.loadPermissions(roles);
             } else {
+                console.log(JSON.stringify(this.getUser().role));
                 this.permissionsService.loadPermissions(this.getUser().role);
             }
+            this.permissionsService.permissions$.subscribe(item => {
+                console.log(JSON.stringify(item));
+            });
         }
     }
 
@@ -77,9 +77,9 @@ export class AuthService {
             .pipe(
                 map((response: any) => {
                     const user = response;
+                    console.log(user);
                     if (user) {
                         this.localStorageService.setOnLocalStorage<string>(LocalStorageService.TOKEN, user.token);
-                        //localStorage.setItem('token', user.token);
                         this.decodedToken = this.jwtHelper.decodeToken(user.token);
                         this.loadPermissions();
                         this.userLoggedIn.next(true);
@@ -88,7 +88,6 @@ export class AuthService {
             )
     }
     logout() {
-        //localStorage.removeItem("token");
         this.localStorageService.clearLocalStorage();
         this.permissionsService.flushPermissions();
     }

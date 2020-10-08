@@ -1,23 +1,28 @@
 import { Inject, Injectable } from '@angular/core';
+import { LOCAL_STORAGE, StorageService } from 'angular-webstorage-service';
 @Injectable()
 export class LocalStorageService {
 
     static readonly TOKEN = 'token';
-    constructor(private localSt:LocalStorageService) {
+    constructor(@Inject(LOCAL_STORAGE) private storage: StorageService) {
 
     }
     public setOnLocalStorage<T>(key: string, value: T): void {
-        this.localSt.setOnLocalStorage(key, value);
+        // insert updated array to local storage
+        this.storage.set(key, value);
     }
 
-    public getFromLocalStorage<T>(key: string,defaultValue: T): T {
-        return this.localSt.getFromLocalStorage<T>(key,defaultValue);
+    public getFromLocalStorage<T>(key: string, defaultValue: T): T {
+        const val: T = this.storage.get(key);
+        if (val === null) return defaultValue;
+
+        return val;
     }
     public removeItem(key: string): void {
-        this.localSt.removeItem(key);
+        this.storage.remove(key);
     }
     public clearLocalStorage(): void {
-        this.localSt.removeItem(LocalStorageService.TOKEN);
+        this.storage.remove(LocalStorageService.TOKEN);
+        //TODO dodać usuwanie po wylogowaniu z aplikacji
     }
-
 }

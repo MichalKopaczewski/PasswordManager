@@ -1,7 +1,11 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+
+using PasswordManager.Infrastructure.Persistance;
+using PasswordManager.Infrastructure.Persistance.Initializers;
 
 using System;
 using System.Collections.Generic;
@@ -14,7 +18,12 @@ namespace PasswordManager
     {
         public static void Main(string[] args)
         {
-            CreateHostBuilder(args).Build().Run();
+            var host = CreateHostBuilder(args).Build();
+            using var scope = host.Services.CreateScope();
+            var context = scope.ServiceProvider.GetService<PasswordManagerContext>();
+            PasswordManagerInitializer pmInitializer = new PasswordManagerInitializer(context);
+            pmInitializer.SeedEverything();
+            host.Run();
         }
 
         public static IHostBuilder CreateHostBuilder(string[] args) =>

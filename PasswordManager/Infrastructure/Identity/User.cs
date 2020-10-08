@@ -7,7 +7,7 @@ namespace PasswordManager.Infrastructure.Identity
 {
     public class User
     {
-        public object UserName { get; internal set; }
+        public string UserName { get; internal set; }
         public IEnumerable<string> Roles { get; internal set; }
     }
 }

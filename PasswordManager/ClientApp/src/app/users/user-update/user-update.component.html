@@ -1,0 +1,24 @@
+<h2>Uzytkownik</h2>
+<form [formGroup]="userForm" (ngSubmit)="saveUser()">
+    
+    <div class="row">
+        <div class="form-group col-3">
+            <label>Login</label>
+            <input readonly type="text" class="form-control" formControlName="username" placeholder="Login">
+        </div>
+        <div class="form-group col-3">
+            <label>Hasło</label>
+            <input  type="password" class="form-control" formControlName="password" placeholder="Hasło">
+        </div>
+    </div>
+
+
+    <div class="row">
+        <div class="form-group text-center d-inline-block col-1">
+            <button class="btn btn-outline-success" [disabled]="!userForm.valid" type="submit">Zapisz</button>
+        </div>
+        <div class="form-group text-center d-inline-block col-1">
+            <button class="btn btn-outline-danger" type="button" (click)="removeUser()">Usuń</button>
+        </div>
+    </div>
+</form>

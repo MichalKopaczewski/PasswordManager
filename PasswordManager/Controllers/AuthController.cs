@@ -22,12 +22,10 @@ namespace PasswordManager.Controllers
         [HttpPost("Login")]
         public async Task<ActionResult> Login([FromBody] LoginCommand loginCommand)
         {
-            User user = new User();
-            user.UserName = "admin";
-            user.Roles = new List<string>() { "admin" };
+            UserVM user = await Mediator.Send(loginCommand);
             return Ok(new 
             { 
-                token = TokenManager.GenerateAccessToken(configuration.GetSection("AppSettings:Token").Value, user) 
+                token = TokenManager.GenerateAccessToken(configuration.GetSection("AppSettings:Token").Value, new Infrastructure.Identity.User() {UserName = user.Username,Roles = user.UserRoles }) 
             });
         }
     }

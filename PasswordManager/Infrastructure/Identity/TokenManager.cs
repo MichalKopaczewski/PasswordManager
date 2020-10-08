@@ -2,11 +2,13 @@
 using JWT.Builder;
 
 using Microsoft.AspNetCore.Identity;
+using Microsoft.IdentityModel.Tokens;
 
+using System.Security.Claims;
 using System;
 using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
-using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -16,18 +18,40 @@ namespace PasswordManager.Infrastructure.Identity
     {
         public static string GenerateAccessToken(string secret,User user)
         {
-            List<KeyValuePair<string, object>> claimRoles = new List<KeyValuePair<string, object>>();
-            foreach (string item in user.Roles)
+            
+
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secret));
+
+            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha512Signature);
+
+            List<Claim> claims = new List<Claim>();
+            claims.Add(new Claim(ClaimTypes.NameIdentifier, user.UserName));
+            claims.Add(new Claim(ClaimTypes.Name, user.UserName));
+            foreach (var item in user.Roles)
             {
-                claimRoles.Add(new KeyValuePair<string, object>(ClaimTypes.Role,item));
+                claims.Add(new Claim(ClaimTypes.Role, item));
             }
+            var tokenDescriptior = new SecurityTokenDescriptor()
+            {
+                Subject = new ClaimsIdentity(claims),
+                Expires = DateTime.Now.AddDays(7),
+                SigningCredentials = creds
+            };
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+
+            var token = tokenHandler.CreateToken(tokenDescriptior);
+
+            return tokenHandler.WriteToken(token);
+
+            /*
             return new JwtBuilder()
                 .WithAlgorithm(new HMACSHA512Algorithm())
                 .WithSecret(Encoding.ASCII.GetBytes(secret))
                 .AddClaim(ClaimTypes.Expiration, DateTimeOffset.UtcNow.AddYears(10).ToUnixTimeSeconds())
                 .AddClaim(ClaimTypes.NameIdentifier, user.UserName)
                 .AddClaims(claimRoles)
-                .Encode();
+                .Encode();*/
         }
     }
 }

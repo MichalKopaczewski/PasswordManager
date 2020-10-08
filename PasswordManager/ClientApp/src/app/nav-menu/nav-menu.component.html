@@ -1,38 +1,31 @@
 <header>
-    <nav class="navbar navbar-expand-sm navbar-toggleable-sm navbar-light bg-white border-bottom box-shadow mb-3">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
         <div class="container">
             <a class="navbar-brand" [routerLink]="['/']">PasswordManager</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target=".navbar-collapse"
                 aria-label="Toggle navigation" [attr.aria-expanded]="isExpanded" (click)="toggle()">
                 <span class="navbar-toggler-icon"></span>
             </button>
-            <div class="navbar-collapse collapse d-sm-inline-flex flex-sm-row-reverse" [ngClass]="{ show: isExpanded }">
-                <ul class="navbar-nav flex-grow">
-                    <li class="nav-item" [routerLinkActive]="['link-active']"
-                        [routerLinkActiveOptions]="{ exact: true }">
-                        <a class="nav-link text-dark" [routerLink]="['/']">Home</a>
+            <div *ngIf="loggedIn()" class="collapse navbar-collapse" [ngClass]='{"show": isExpanded}'>
+                <ul class="navbar-nav mr-auto">
+                    <li *ngxPermissionsOnly="['Admin']" class="nav-item" [routerLinkActive]='["link-active"]'>
+                        <a class="nav-link " [routerLink]='["/users"]'>Użytkownicy</a>
                     </li>
 
                 </ul>
             </div>
-            <form autocomplete="off" *ngIf="!loggedIn()" #loginForm="ngForm" class="form-inline my-2 my-lg-0"
-                (ngSubmit)="login()">
-                <input type="text" name="login" class="form-control mr-sm-2" placeholder="Login" required
-                    [(ngModel)]="model.login" />
-                <input autocomplete="off" type="password" name="password" class="form-control mr-sm-2" placeholder="Hasło"
-                    required [(ngModel)]="model.password" />
-                <button type="submit" value="Submit" class="btn btn-success my-2 my-sm-0"
-                    [disabled]="!loginForm.valid || isLoginDisabled">Login</button>
-            </form>
+
+            <div *ngIf="!loggedIn()" class="dropdown">
+                <a class="nav-link " [routerLink]='["/login"]'>Logowanie</a>
+            </div>
             <div *ngIf="loggedIn()" class="dropdown">
                 <a class="dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown">
-                    Witaj {{authService.decodedToken?.unique_name | titlecase}}
+                    Witaj {{authService.decodedToken?.unique_name}}
                 </a>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <a class="dropdown-item" (click)="logout()">Wyloguj</a>
+                    <a class="dropdown-item" (click)="logout()" href="#">Wyloguj</a>
                 </div>
             </div>
-            <a class="ml-2  ">v{{version}}</a>
         </div>
     </nav>
 </header>

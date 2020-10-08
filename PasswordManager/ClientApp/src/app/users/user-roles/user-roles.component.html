@@ -1,0 +1,19 @@
+<h2>Role</h2>
+
+<table class="table table-hover">
+    <thead>
+        <tr>
+            <th>Nazwa</th>
+            <th>Przypisanie</th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let us of user.userRoles">
+            <td>{{us.roleName}}</td>
+            <td>
+                <button *ngIf="us.isAssigned" type="button"  class="btn btn-outline-danger" (click)="removeAssignment(us.roleName)">Usuń przypisanie</button>
+                <button *ngIf="us.isAssigned===false" type="button"  class="btn btn-outline-success" (click)="addAssignment(us.roleName)">Dodaj przypisanie</button>
+            </td>
+        </tr>
+    </tbody>
+</table>

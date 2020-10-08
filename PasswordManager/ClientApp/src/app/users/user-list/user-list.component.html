@@ -1,0 +1,22 @@
+<h2>Uzytkownicy</h2>
+
+<a class="btn btn-outline-primary mb-3" [routerLink]="['/user-new']" >Nowy</a>
+<table class="table table-sm table-hover">
+    <thead>
+        <tr>
+            <th *ngFor="let c of columns">
+                <div>
+                    {{ c.title }}
+                </div>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let p of queryResult.items">
+            <td>{{p.username}}</td>
+            <td>
+                <a [routerLink]="['/users-details/', p.username]">Edycja</a>
+            </td>
+        </tr>
+    </tbody>
+</table>
