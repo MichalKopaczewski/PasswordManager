@@ -2,15 +2,17 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PasswordManager.Infrastructure.Persistance;
 
-namespace PasswordManager.Infrastructure.Persistance.Migrations
+namespace PasswordManager.infrastructure.persistance.migrations
 {
     [DbContext(typeof(PasswordManagerContext))]
-    partial class PasswordManagerContextModelSnapshot : ModelSnapshot
+    [Migration("20201010084008_Vaults")]
+    partial class Vaults
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -25,9 +27,6 @@ namespace PasswordManager.Infrastructure.Persistance.Migrations
                         .HasColumnType("bigint")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<string>("Email")
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<string>("Login")
                         .HasColumnType("nvarchar(max)");
 
@@ -37,14 +36,19 @@ namespace PasswordManager.Infrastructure.Persistance.Migrations
                     b.Property<string>("Portal")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(450)");
+
                     b.Property<long>("VaultId")
                         .HasColumnType("bigint");
 
                     b.HasKey("Id");
 
+                    b.HasIndex("Username");
+
                     b.HasIndex("VaultId");
 
-                    b.ToTable("Entries");
+                    b.ToTable("Entry");
                 });
 
             modelBuilder.Entity("PasswordManager.Domain.Entities.Role", b =>
@@ -114,23 +118,33 @@ namespace PasswordManager.Infrastructure.Persistance.Migrations
                     b.Property<string>("MasterPassword")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("MasterSalt")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Username")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username1")
                         .HasColumnType("nvarchar(450)");
 
                     b.HasKey("Id");
 
-                    b.HasIndex("Username");
+                    b.HasIndex("Username1");
 
-                    b.ToTable("Vaults");
+                    b.ToTable("Vault");
                 });
 
             modelBuilder.Entity("PasswordManager.Domain.Entities.Entry", b =>
                 {
-                    b.HasOne("PasswordManager.Domain.Entities.Vault", null)
-                        .WithMany()
+                    b.HasOne("PasswordManager.Domain.Entities.User", null)
+                        .WithMany("UserEntries")
+                        .HasForeignKey("Username");
+
+                    b.HasOne("PasswordManager.Domain.Entities.Vault", "Vault")
+                        .WithMany("VaultEntries")
                         .HasForeignKey("VaultId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -138,14 +152,14 @@ namespace PasswordManager.Infrastructure.Persistance.Migrations
 
             modelBuilder.Entity("PasswordManager.Domain.Entities.UserRole", b =>
                 {
-                    b.HasOne("PasswordManager.Domain.Entities.Role", null)
-                        .WithMany()
+                    b.HasOne("PasswordManager.Domain.Entities.Role", "Role")
+                        .WithMany("RoleUsers")
                         .HasForeignKey("RoleName")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("PasswordManager.Domain.Entities.User", null)
-                        .WithMany()
+                    b.HasOne("PasswordManager.Domain.Entities.User", "User")
+                        .WithMany("UserRoles")
                         .HasForeignKey("Username")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -153,9 +167,9 @@ namespace PasswordManager.Infrastructure.Persistance.Migrations
 
             modelBuilder.Entity("PasswordManager.Domain.Entities.Vault", b =>
                 {
-                    b.HasOne("PasswordManager.Domain.Entities.User", null)
-                        .WithMany()
-                        .HasForeignKey("Username");
+                    b.HasOne("PasswordManager.Domain.Entities.User", "User")
+                        .WithMany("UserVaults")
+                        .HasForeignKey("Username1");
                 });
 #pragma warning restore 612, 618
         }

@@ -19,6 +19,7 @@ namespace PasswordManager.Infrastructure.Persistance.Configurations
             builder.Property(item => item.Password).IsRequired(true);
             builder.HasIndex(item => item.Username).IsUnique(true);
             builder.Property(item => item.Username).IsRequired(true);
+
         }
     }
 }

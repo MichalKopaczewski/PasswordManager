@@ -3,6 +3,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -10,6 +11,7 @@ namespace PasswordManager.Infrastructure.Auth
 {
     public class Encryptor
     {
+        private static int saltLengthLimit = 32;
         private const string SALT = "LMbGPk4TXPMfkPP8lFkBXw==";
         
         public static string Encode(string value, string salt)
@@ -26,6 +28,20 @@ namespace PasswordManager.Infrastructure.Auth
         public static string Encode(string value)
         {
             return Encode(value, SALT);
+        }
+        private static byte[] GetSalt(int maximumSaltLength)
+        {
+            var salt = new byte[maximumSaltLength];
+            using (var random = new RNGCryptoServiceProvider())
+            {
+                random.GetNonZeroBytes(salt);
+            }
+
+            return salt;
+        }
+        public static string GenerateSalt()
+        {
+            return Encoding.UTF8.GetString(GetSalt(saltLengthLimit));
         }
 
         public static bool Validate(string value, string salt, string hash)

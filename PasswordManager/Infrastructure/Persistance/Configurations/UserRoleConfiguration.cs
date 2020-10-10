@@ -21,12 +21,12 @@ namespace PasswordManager.Infrastructure.Persistance.Configurations
             builder.Property(item => item.RoleName).IsRequired(true);
             builder.Property(item => item.Username).IsRequired(true);
             builder.HasIndex(item => new { item.Username, item.RoleName}).IsUnique();
-            builder.HasOne(a => a.Role)
-                .WithMany(b => b.RoleUsers)
+            builder.HasOne<Role>()
+                .WithMany()
                 .HasForeignKey(x => x.RoleName)
                 .HasPrincipalKey(x => x.Name);
-            builder.HasOne(a => a.User)
-                .WithMany(b => b.UserRoles)
+            builder.HasOne<User>()
+                .WithMany()
                 .HasForeignKey(x => x.Username)
                 .HasPrincipalKey(x => x.Username);
         }

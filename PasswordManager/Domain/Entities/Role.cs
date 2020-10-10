@@ -10,6 +10,5 @@ namespace PasswordManager.Domain.Entities
         public string Name { get; set; }
         public string Description { get; set; }
 
-        public IEnumerable<UserRole> RoleUsers { get; set; }
     }
 }

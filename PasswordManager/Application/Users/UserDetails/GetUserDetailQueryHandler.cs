@@ -19,7 +19,10 @@ namespace PasswordManager.Application.Users.UserDetails
 
         public async Task<UserDetailsVM> Handle(GetUserDetailQuery request, CancellationToken cancellationToken)
         {
-            var a = await PmContext.Users.Include(b => b.UserRoles).FirstOrDefaultAsync(item => item.Username == request.Username);
+            var a = await (from us in PmContext.Users
+                         where us.Username == request.Username
+                           select new { us.Username }
+                           ).FirstOrDefaultAsync();
 
             var d = from role in PmContext.Roles
                     join userRole in PmContext.UserRoles.Where(item => item.Username == a.Username) on role.Name equals userRole.RoleName

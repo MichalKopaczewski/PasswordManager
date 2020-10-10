@@ -5,10 +5,12 @@ using System.Threading.Tasks;
 
 namespace PasswordManager.Domain.Entities
 {
-    public class User
+    public class Vault
     {
         public string Username { get; set; }
-        public string Password { get; set; }
+        public long Id { get; set; }
+        public string Name { get; set; }
+        public string MasterPassword { get; set; }
 
     }
 }

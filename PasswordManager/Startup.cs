@@ -4,23 +4,26 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.SpaServices.AngularCli;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 
+using PasswordManager.Infrastructure;
 using PasswordManager.Infrastructure.Persistance;
+using PasswordManager.Infrastructure.Services;
 
 using System;
+using System.Collections.Generic;
+using System.Diagnostics;
 using System.Net;
 using System.Reflection;
-using System.Text;
-using System.Diagnostics;
 using System.Runtime.InteropServices;
-using PasswordManager.Infrastructure;
-using Microsoft.AspNetCore.Http;
+using System.Text;
 
 namespace PasswordManager
 {
@@ -37,10 +40,39 @@ namespace PasswordManager
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddHttpContextAccessor();
+
+            services.AddTransient<UserResolverService>();
+
             services.AddMvc(options =>
             {
                 options.EnableEndpointRouting = false;
             }).AddNewtonsoftJson();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme()
+                {
+                    Description = "Enter token",
+                    Name = "Authorization",
+                    Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+                    In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+                    Scheme = "Bearer"
+                });
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement()
+                {
+                    {
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        Array.Empty<string>()
+                    }
+                });
+            });
 
             services.AddMediatR(Assembly.GetExecutingAssembly());
 
@@ -106,6 +138,7 @@ namespace PasswordManager
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+
             if (env.IsDevelopment() && true == false)
             {
                 app.UseDeveloperExceptionPage();
@@ -152,7 +185,11 @@ namespace PasswordManager
             app.UseAuthentication();
             app.UseSpaStaticFiles();
             app.UseStaticFiles();
-
+            app.UseSwagger();
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "My api v1");
+            });
             /*
             app.UseEndpoints(endpoints =>
             {
@@ -164,7 +201,7 @@ namespace PasswordManager
             app.UseMvc(routes =>
             {
                 routes.MapRoute("default", "{controller}/{action=Index}/{id?}");
-              //  routes.MapSpaFallbackRoute(name: "spa -fallback", defaults: new { controller = "Home", action = "Index" });
+                //  routes.MapSpaFallbackRoute(name: "spa -fallback", defaults: new { controller = "Home", action = "Index" });
 
             });
             app.UseSpa(spa =>

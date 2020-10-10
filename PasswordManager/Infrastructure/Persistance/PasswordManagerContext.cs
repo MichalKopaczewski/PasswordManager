@@ -15,6 +15,8 @@ namespace PasswordManager.Infrastructure.Persistance
         public DbSet<User> Users { get; set; }
         public DbSet<UserRole> UserRoles { get; set; }
         public DbSet<Role> Roles { get; set; }
+        public DbSet<Vault> Vaults { get; set; }
+        public DbSet<Entry> Entries { get; set; }
         public PasswordManagerContext()
         {
         }
@@ -28,6 +30,8 @@ namespace PasswordManager.Infrastructure.Persistance
             builder.ApplyConfiguration(new UserConfiguration());
             builder.ApplyConfiguration(new RoleConfiguration());
             builder.ApplyConfiguration(new UserRoleConfiguration());
+            builder.ApplyConfiguration(new EntryConfiguration());
+            builder.ApplyConfiguration(new VaultConfiguration());
             base.OnModelCreating(builder);
         }
 

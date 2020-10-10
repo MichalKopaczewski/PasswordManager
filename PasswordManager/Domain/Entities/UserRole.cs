@@ -10,8 +10,6 @@ namespace PasswordManager.Domain.Entities
         public string Username { get; set; }
         public string RoleName { get; set; }
 
-        public Role Role { get; set; }
-        public User User { get; set; }
         public string Id { get;  set; }
     }
 }
