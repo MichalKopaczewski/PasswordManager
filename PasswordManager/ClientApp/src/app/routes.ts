@@ -12,11 +12,11 @@ import { VaultNewComponent } from "./vaults/vault-new/vault-new.component";
 import { VaultsListComponent } from "./vaults/vaults-list-component/vaults-list.component";
 
 export const appRoutes: Routes = [
-    { path: '', component: HomeComponent },
+    { path: '', component: VaultsListComponent },
     {
         path: '', runGuardsAndResolvers: 'always',
         children: [
-            { path: '', component: HomeComponent, pathMatch: 'full' },
+            { path: '', component: VaultsListComponent, pathMatch: 'full' },
             { path: 'home', component: HomeComponent },
             { path: 'login', component: LoginComponent },
             {
