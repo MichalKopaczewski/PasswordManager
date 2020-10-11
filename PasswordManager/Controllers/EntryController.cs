@@ -16,30 +16,30 @@ namespace PasswordManager.Controllers
     public class EntryController : BaseController
     {
 
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,SystemUser")]
         [HttpPost("CreateEntry")]
-        public async Task<ActionResult> CreateVault([FromBody] CreateEntryCommand command)
+        public async Task<ActionResult> CreateEntry([FromBody] CreateEntryCommand command)
         {
             var a = await Mediator.Send(command);
             return Ok(a);
         }
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,SystemUser")]
         [HttpPost("UpdateEntry")]
-        public async Task<ActionResult> CreateVault([FromBody] UpdateEntryCommand command)
+        public async Task<ActionResult> UpdateEntry([FromBody] UpdateEntryCommand command)
         {
             var a = await Mediator.Send(command);
             return Ok(a);
         }
-        [Authorize(Roles = "Admin")]
+        [Authorize(Roles = "Admin,SystemUser")]
         [HttpPost("DeleteEntry")]
         public async Task<ActionResult> DeleteEntry([FromBody] DeleteEntryCommand command)
         {
             var a = await Mediator.Send(command);
             return Ok(a);
         }
-        [Authorize]
+        [Authorize(Roles = "Admin,SystemUser")]
         [HttpGet("GetEntry/{entryId}")]
-        public async Task<ActionResult> GetEntry(long entryId)
+        public async Task<ActionResult<EntryDetailVM>> GetEntry(long entryId)
         {
             var a = await Mediator.Send(new EntryDetailQuery() { EntryId = entryId});
             return Ok(a);

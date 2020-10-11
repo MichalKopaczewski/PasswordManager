@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
 import { NgxPermissionsService } from 'ngx-permissions';
 import { AuthService } from '../services/auth.service';
 @Component({
@@ -10,7 +11,9 @@ export class NavMenuComponent  implements OnInit{
     isExpanded = false;
 
     constructor(public authService: AuthService,
-        private ngxPermission :NgxPermissionsService) {
+        private ngxPermission :NgxPermissionsService,
+        private router:Router
+        ) {
 
     }
     
@@ -37,6 +40,6 @@ export class NavMenuComponent  implements OnInit{
     }
     logout() {
         localStorage.removeItem("token");
-        console.log("logged out");
+        this.router.navigate(['/login']);
     }
 }

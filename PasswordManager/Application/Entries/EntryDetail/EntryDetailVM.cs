@@ -7,10 +7,11 @@ namespace PasswordManager.Application.Entries.EntryDetail
 {
     public class EntryDetailVM
     {
-        public long Id { get; internal set; }
-        public string Email { get; internal set; }
-        public string Password { get; internal set; }
-        public string Portal { get; internal set; }
-        public string Login { get; internal set; }
+        public long Id { get;  set; }
+        public string Email { get;  set; }
+        public string Password { get;  set; }
+        public string Portal { get;  set; }
+        public string Login { get;  set; }
+        public long VaultId { get;  set; }
     }
 }

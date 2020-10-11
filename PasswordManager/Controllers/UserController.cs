@@ -19,7 +19,7 @@ namespace PasswordManager.Controllers
 {
     public class UserController : BaseController
     {
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpGet("GetUsers")]
         public async Task<ActionResult<IEnumerable<UserListItemVM>>> GetUserList()
         {
@@ -73,14 +73,14 @@ namespace PasswordManager.Controllers
             await Mediator.Send(removeUser);
             return Ok();
         }
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpGet("GetRoles")]
         public async Task<ActionResult<IEnumerable<RoleListItemVM>>> GetRoles()
         {
             var a = await Mediator.Send(new GetRoleListQuery());
             return Ok(a);
         }
-        [Authorize]
+        [Authorize(Roles = "Admin")]
         [HttpGet("GetRolesNames")]
         public async Task<ActionResult<IEnumerable<RoleListItemVM>>> GetRolesNames()
         {

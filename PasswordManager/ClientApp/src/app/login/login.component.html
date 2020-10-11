@@ -1,5 +1,4 @@
-<h2>Login</h2>
-<form [formGroup]="loginForm" class="col-6" (ngSubmit)="onSubmit()">
+<form [formGroup]="loginForm" class="col-6 mt-4" (ngSubmit)="onSubmit()">
     <div class="form-group">
         <label for="username">Nazwa użytkownika</label>
         <input type="text" formControlName="username" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.username.errors }" />

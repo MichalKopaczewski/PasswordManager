@@ -15,7 +15,6 @@ import { AuthService } from './services/auth.service';
 import { LocalStorageService } from './services/local-storage-service';
 import { LoginComponent } from './login/login.component';
 import { appRoutes } from './routes';
-import { CounterComponent } from './counter/counter.component';
 import { StorageServiceModule } from 'angular-webstorage-service';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { UserService } from './services/users.service';
@@ -28,6 +27,12 @@ import { UserRolesComponent } from './users/user-roles/user-roles.component';
 import { UserUpdateComponent } from './users/user-update/user-update.component';
 import { UserDetailResolver } from './resolvers/user-detail.resolver';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+import { EntryService } from './services/entry.service';
+import { VaultService } from './services/vault.service';
+import { VaultsListComponent } from './vaults/vaults-list-component/vaults-list.component';
+import { VaultNewComponent } from './vaults/vault-new/vault-new.component';
+import { VaultEntriesComponent } from './vaults/vault-entries/vault-entries.component';
+import { EntryNewUpdateComponent } from './vaults/entry-new-update/entry-new-update.component';
 // export function tokenGetter() {
 //   return localStorage.getItem("token");
 // }
@@ -48,8 +53,11 @@ export function tokenGetter(): string {
     UserListComponent,
     UsersDetailsComponent,
     UserUpdateComponent,
-    CounterComponent,
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    VaultsListComponent,
+    VaultNewComponent,
+    VaultEntriesComponent,
+    EntryNewUpdateComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -88,7 +96,9 @@ export function tokenGetter(): string {
     LocalStorageService,
     UserService,
     UserDetailResolver,
-    ConfirmationDialogService
+    ConfirmationDialogService,
+    EntryService,
+    VaultService
   ],
   entryComponents: [
     ConfirmationDialogComponent

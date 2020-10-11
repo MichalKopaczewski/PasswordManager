@@ -40,7 +40,7 @@ namespace PasswordManager.Application.Vaults.RemoveVault
 
             PmContext.Entries.RemoveRange(entries);
             PmContext.Vaults.Remove(vault);
-
+            PmContext.SaveChanges();
             await trans.CommitAsync();
             return Unit.Value;
         }

@@ -1,0 +1,52 @@
+<h2>{{vault.name}}</h2>
+
+<a class="btn btn-outline-primary mb-3" [routerLink]="['/entry-new/', vaultId]">Nowy wpis</a>
+<table class="table table-sm table-hover">
+    <thead>
+        <tr>
+            <th>
+                <div>
+                    Portal
+                </div>
+            </th>
+            <th>
+                <div>
+                    Login
+                </div>
+            </th>
+            <th>
+                <div>
+                    Email
+                </div>
+            </th>
+            <th>
+                <div>
+                    Hasło
+                </div>
+            </th>
+            <th>
+                <div>
+                </div>
+            </th>
+            <th>
+                <div>
+                </div>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let p of vaultEntries">
+            <td>{{p.portal}}</td>
+            <td>{{p.login}}</td>
+            <td>{{p.email}}</td>
+            <td>{{p.password}}</td>
+            <td>
+                <a [routerLink]="['/entry-update/', p.entryId]">Edycja</a>
+            </td>
+
+            <td>
+                <button type="button" class="btn btn-outline-danger" (click)="removeEntry(p.entryId)">Usuń</button>
+            </td>
+        </tr>
+    </tbody>
+</table>

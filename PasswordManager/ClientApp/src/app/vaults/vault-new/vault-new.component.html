@@ -1,0 +1,19 @@
+<form [formGroup]="vaultForm" (ngSubmit)="saveVault()">
+    <h2>Nowy sejf</h2>
+
+    <div class="form-row">
+        <div class="form-group col-md-6">
+            <label>Nazwa</label>
+            <input type="text" class="form-control" formControlName="name" placeholder="Nazwa">
+        </div>
+    </div>
+    <div class="form-row">
+        <div class="form-group col-md-3">
+            <label>Hasło</label>
+            <input type="password" class="form-control" formControlName="masterPassword" placeholder="Hasło">
+        </div>
+    </div>
+    <div class="form-group">
+        <button class="btn btn-success" [disabled]="!vaultForm.valid" type="submit">Zapisz</button>
+    </div>
+</form>

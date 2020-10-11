@@ -4,15 +4,20 @@
 <table class="table table-sm table-hover">
     <thead>
         <tr>
-            <th *ngFor="let c of columns">
+            <th >
                 <div>
-                    {{ c.title }}
+                    Nazwa użytkownika
+                </div>
+            </th>
+            <th >
+                <div>
+                    Edycja
                 </div>
             </th>
         </tr>
     </thead>
     <tbody>
-        <tr *ngFor="let p of queryResult.items">
+        <tr *ngFor="let p of users">
             <td>{{p.username}}</td>
             <td>
                 <a [routerLink]="['/users-details/', p.username]">Edycja</a>

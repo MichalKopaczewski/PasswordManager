@@ -10,6 +10,9 @@
                 <ul class="navbar-nav mr-auto">
                     <li *ngxPermissionsOnly="['Admin']" class="nav-item" [routerLinkActive]='["link-active"]'>
                         <a class="nav-link " [routerLink]='["/users"]'>Użytkownicy</a>
+                    </li> 
+                    <li *ngxPermissionsOnly="['Admin','SystemUser']" class="nav-item" [routerLinkActive]='["link-active"]'>
+                        <a class="nav-link " [routerLink]='["/vaults"]'>Sejfy</a>
                     </li>
 
                 </ul>
@@ -23,7 +26,7 @@
                     Witaj {{authService.decodedToken?.unique_name}}
                 </a>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
-                    <a class="dropdown-item" (click)="logout()" href="#">Wyloguj</a>
+                    <a class="dropdown-item" (click)="logout()" >Wyloguj</a>
                 </div>
             </div>
         </div>

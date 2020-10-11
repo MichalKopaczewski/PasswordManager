@@ -1,0 +1,43 @@
+<h2>Twoje sejfy</h2>
+
+<a class="btn btn-outline-primary mb-3" [routerLink]="['/vault-new']">Nowy</a>
+<table class="table table-sm table-hover">
+    <thead>
+        <tr>
+            <th>
+                <div>
+                    Nazwa
+                </div>
+            </th>
+            <th>
+                <div>
+                    Edycja
+                </div>
+            </th>
+            <th>
+                <div>
+                    Wpisy
+                </div>
+            </th>
+            <th>
+                <div>
+                </div>
+            </th>
+        </tr>
+    </thead>
+    <tbody>
+        <tr *ngFor="let p of vaults">
+            <td>{{p.name}}</td>
+            <td>
+                <a [routerLink]="['/vault-details/', p.vaultId]">Edycja</a>
+            </td>
+            <td>
+                <a [routerLink]="['/vault-entries/', p.vaultId]">Wpisy</a>
+            </td>
+
+            <td>
+                <button type="button" class="btn btn-outline-danger" (click)="removeVault(p.vaultId)">Usuń sejf</button>
+            </td>
+        </tr>
+    </tbody>
+</table>
