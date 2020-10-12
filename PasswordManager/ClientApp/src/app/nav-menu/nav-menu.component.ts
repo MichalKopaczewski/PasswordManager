@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgxPermissionsService } from 'ngx-permissions';
 import { AuthService } from '../services/auth.service';
+import { LocalStorageService } from '../services/local-storage-service';
 @Component({
     selector: 'app-nav-menu',
     templateUrl: './nav-menu.component.html',
@@ -12,7 +13,8 @@ export class NavMenuComponent  implements OnInit{
 
     constructor(public authService: AuthService,
         private ngxPermission :NgxPermissionsService,
-        private router:Router
+        private router:Router,
+        private localStorageService:LocalStorageService
         ) {
 
     }
@@ -39,7 +41,7 @@ export class NavMenuComponent  implements OnInit{
         return this.authService.loggedIn();
     }
     logout() {
-        localStorage.removeItem("token");
+        this.localStorageService.clearLocalStorage();
         this.router.navigate(['/login']);
     }
 }

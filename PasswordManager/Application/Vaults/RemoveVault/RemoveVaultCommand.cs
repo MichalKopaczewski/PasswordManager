@@ -10,5 +10,6 @@ namespace PasswordManager.Application.Vaults.RemoveVault
     public class RemoveVaultCommand : IRequest
     {
         public long VaultId { get; set; }
+        public string MasterPassword { get; set; }
     }
 }

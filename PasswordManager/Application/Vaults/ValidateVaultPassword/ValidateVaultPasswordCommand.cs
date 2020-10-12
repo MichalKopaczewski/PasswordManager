@@ -5,11 +5,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
-namespace PasswordManager.Application.Entries.EntryDetail
+namespace PasswordManager.Application.Vaults.ValidateVaultPassword
 {
-    public class EntryDetailQuery : IRequest<EntryDetailVM>
+    public class ValidateVaultPasswordCommand : IRequest<bool>
     {
         public string MasterPassword { get; set; }
-        public long EntryId{ get; set; }
+        public long VaultId { get;  set; }
     }
 }

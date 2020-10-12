@@ -11,11 +11,6 @@
             </th>
             <th>
                 <div>
-                    Edycja
-                </div>
-            </th>
-            <th>
-                <div>
                     Wpisy
                 </div>
             </th>
@@ -28,9 +23,6 @@
     <tbody>
         <tr *ngFor="let p of vaults">
             <td>{{p.name}}</td>
-            <td>
-                <a [routerLink]="['/vault-details/', p.vaultId]">Edycja</a>
-            </td>
             <td>
                 <a [routerLink]="['/vault-entries/', p.vaultId]">Wpisy</a>
             </td>

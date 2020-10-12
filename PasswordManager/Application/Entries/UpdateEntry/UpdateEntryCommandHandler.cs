@@ -2,6 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 
+using PasswordManager.Application.Interfaces;
 using PasswordManager.Infrastructure.Persistance;
 
 using System;
@@ -14,9 +15,12 @@ namespace PasswordManager.Application.Entries.UpdateEntry
 {
     public class UpdateEntryCommandHandler : BaseRequestHandler, IRequestHandler<UpdateEntryCommand>
     {
-        public UpdateEntryCommandHandler(PasswordManagerContext context) : base(context)
+        public UpdateEntryCommandHandler(PasswordManagerContext context,IVaultService vaultService) : base(context)
         {
+            VaultService = vaultService;
         }
+
+        public IVaultService VaultService { get; }
 
         public async Task<Unit> Handle(UpdateEntryCommand request, CancellationToken cancellationToken)
         {
@@ -24,6 +28,11 @@ namespace PasswordManager.Application.Entries.UpdateEntry
             if (entry == null)
             {
                 throw new Exception();
+            }
+
+            if (!VaultService.ValidateVaultPassword(entry.VaultId, request.MasterPassword))
+            {
+                throw new Exception("Podano nie poprawne hasło");
             }
             entry.Email = request.Email;
             entry.Login = request.Login;

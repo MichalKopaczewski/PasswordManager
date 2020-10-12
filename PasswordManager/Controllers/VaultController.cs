@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using PasswordManager.Application.Entries.EntriesList;
 using PasswordManager.Application.Vaults.CreateVault;
 using PasswordManager.Application.Vaults.RemoveVault;
+using PasswordManager.Application.Vaults.ValidateVaultPassword;
 using PasswordManager.Application.Vaults.VaultDetail;
 using PasswordManager.Application.Vaults.VaultsList;
 
@@ -34,7 +35,7 @@ namespace PasswordManager.Controllers
         [HttpGet("GetEntriesList/{vaultId}")]
         public async Task<ActionResult<IEnumerable<EntryItemVM>>> GetEntriesList(long vaultId)
         {
-            var a = await Mediator.Send(new EntriesListQuery() { VaultId = vaultId });
+            var a = await Mediator.Send(new EntriesListQuery() { VaultId = vaultId,MasterPassword = Request.Headers["masterPassword"] });
             return Ok(a);
         }
         [Authorize(Roles = "Admin,SystemUser")]
@@ -45,9 +46,17 @@ namespace PasswordManager.Controllers
             return Ok(a);
         }
         [Authorize(Roles = "Admin,SystemUser")]
+        [HttpPost("ValidateVaultPassword")]
+        public async Task<ActionResult> ValidateVaultPassword([FromBody] ValidateVaultPasswordCommand command)
+        {
+            var a = await Mediator.Send(command);
+            return Ok(a);
+        }
+        [Authorize(Roles = "Admin,SystemUser")]
         [HttpPost("RemoveVault")]
         public async Task<ActionResult> RemoveVault([FromBody] RemoveVaultCommand command)
         {
+            command.MasterPassword = Request.Headers["masterPassword"];
             var a = await Mediator.Send(command);
             return Ok(a);
         }

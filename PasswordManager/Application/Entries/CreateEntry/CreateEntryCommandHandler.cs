@@ -2,6 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 
+using PasswordManager.Application.Interfaces;
 using PasswordManager.Domain.Entities;
 using PasswordManager.Infrastructure.Auth;
 using PasswordManager.Infrastructure.Persistance;
@@ -17,15 +18,23 @@ namespace PasswordManager.Application.Entries.CreateEntry
 {
     public class CreateEntryCommandHandler : BaseRequestHandler, IRequestHandler<CreateEntryCommand>
     {
-        public CreateEntryCommandHandler(PasswordManagerContext context,UserResolverService userResolverService) : base(context)
+        public CreateEntryCommandHandler(PasswordManagerContext context,UserResolverService userResolverService,IVaultService vaultService) : base(context)
         {
             UserResolverService = userResolverService;
+            VaultService = vaultService;
         }
 
         public UserResolverService UserResolverService { get; }
+        public IVaultService VaultService { get; }
 
         public async Task<Unit> Handle(CreateEntryCommand request, CancellationToken cancellationToken)
         {
+
+            if (!VaultService.ValidateVaultPassword(request.VaultId, request.MasterPassword))
+            {
+                throw new Exception("Podano nie poprawne hasło");
+            }
+
             var vault = await (from v in PmContext.Vaults
                                where v.Id == request.VaultId
                                select new { v.Id }

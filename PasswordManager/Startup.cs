@@ -13,6 +13,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
+using PasswordManager.Application.Interfaces;
 using PasswordManager.Infrastructure;
 using PasswordManager.Infrastructure.Persistance;
 using PasswordManager.Infrastructure.Services;
@@ -42,6 +43,8 @@ namespace PasswordManager
             services.AddHttpContextAccessor();
 
             services.AddTransient<UserResolverService>();
+            services.AddTransient<ICryptoService,CryptoService>();
+            services.AddTransient<IVaultService,VaultService>();
 
             services.AddMvc(options =>
             {

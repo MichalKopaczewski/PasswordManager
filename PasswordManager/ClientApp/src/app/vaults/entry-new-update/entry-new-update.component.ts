@@ -4,6 +4,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastrService } from 'ngx-toastr';
 import { ConfirmationDialogService } from 'src/app/confirmation-dialog/confirmation-dialog.service';
 import { EntryCreate } from 'src/app/model/entries/entry-create';
+import { EncryptService } from 'src/app/services/encrypt.service';
 import { EntryService } from 'src/app/services/entry.service';
 
 @Component({
@@ -23,6 +24,7 @@ export class EntryNewUpdateComponent implements OnInit {
         private route: ActivatedRoute,
         private entryService: EntryService,
         private fb: FormBuilder,
+        private encryptService:EncryptService,
         private router: Router) {
     }
 
@@ -50,10 +52,10 @@ export class EntryNewUpdateComponent implements OnInit {
         this.entryService.GetEntry(entryId)
             .subscribe(res => {
                 this.entryForm.setValue({
-                    portal: res.portal,
-                    password: res.password,
-                    login: res.login,
-                    email: res.email
+                    portal: this.encryptService.decryptString(res.portal),
+                    password: this.encryptService.decryptString(res.password),
+                    login: this.encryptService.decryptString(res.login),
+                    email: this.encryptService.decryptString(res.email)
                 });
                 this.vaultId = res.vaultId;
             }, err => {
@@ -64,10 +66,10 @@ export class EntryNewUpdateComponent implements OnInit {
         if (this.forCreate) {
             this.entryService.CreateEntry(
                 {
-                    email: this.entryForm.get('email').value,
-                    login: this.entryForm.get('login').value,
-                    password: this.entryForm.get('password').value,
-                    portal: this.entryForm.get('portal').value,
+                    email: this.encryptService.encryptString(this.entryForm.get('email').value),
+                    login: this.encryptService.encryptString(this.entryForm.get('login').value),
+                    password: this.encryptService.encryptString(this.entryForm.get('password').value),
+                    portal: this.encryptService.encryptString(this.entryForm.get('portal').value),
                     vaultId: this.vaultId
                 }).subscribe(x => {
                     this.toastrService.success('Utworzono wpis');
@@ -78,10 +80,10 @@ export class EntryNewUpdateComponent implements OnInit {
         } else {
             this.entryService.UpdateEntry(
                 {
-                    email: this.entryForm.get('email').value,
-                    login: this.entryForm.get('login').value,
-                    password: this.entryForm.get('password').value,
-                    portal:  this.entryForm.get('portal').value,
+                    email: this.encryptService.encryptString(this.entryForm.get('email').value),
+                    login: this.encryptService.encryptString(this.entryForm.get('login').value),
+                    password: this.encryptService.encryptString(this.entryForm.get('password').value),
+                    portal:  this.encryptService.encryptString(this.entryForm.get('portal').value),
                     id:this.entryId
                 }).subscribe(x => {
                     this.toastrService.success('Zaktualizowano wpis');

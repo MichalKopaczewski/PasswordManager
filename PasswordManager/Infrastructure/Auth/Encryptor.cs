@@ -14,7 +14,7 @@ namespace PasswordManager.Infrastructure.Auth
         private static int saltLengthLimit = 32;
         private const string SALT = "LMbGPk4TXPMfkPP8lFkBXw==";
         
-        public static string Encode(string value, string salt)
+        public static string HashString(string value, string salt)
         {
             var valueBytes = KeyDerivation.Pbkdf2(
                                 password: value,
@@ -27,7 +27,7 @@ namespace PasswordManager.Infrastructure.Auth
         }
         public static string Encode(string value)
         {
-            return Encode(value, SALT);
+            return HashString(value, SALT);
         }
         private static byte[] GetSalt(int maximumSaltLength)
         {
@@ -45,9 +45,9 @@ namespace PasswordManager.Infrastructure.Auth
         }
 
         public static bool Validate(string value, string salt, string hash)
-            => Encode(value, salt) == hash;
+            => HashString(value, salt) == hash;
         public static bool Validate(string value, string hash)
-            => Encode(value, SALT) == hash;
+            => HashString(value, SALT) == hash;
 
     }
 }

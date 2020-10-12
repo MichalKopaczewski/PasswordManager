@@ -3,6 +3,7 @@ import { ToastrService } from 'ngx-toastr';
 import { ConfirmationDialogComponent } from 'src/app/confirmation-dialog/confirmation-dialog.component';
 import { ConfirmationDialogService } from 'src/app/confirmation-dialog/confirmation-dialog.service';
 import { VaultItem } from 'src/app/model/vaults/vault-item';
+import { EncryptService } from 'src/app/services/encrypt.service';
 import { VaultService } from 'src/app/services/vault.service';
 
 @Component({
@@ -14,7 +15,8 @@ export class VaultsListComponent implements OnInit {
 
     constructor(private vaultService: VaultService,
         private toastrService: ToastrService,
-        private confirmDialogService:ConfirmationDialogService) {
+        private confirmDialogService:ConfirmationDialogService
+        ) {
     }
 
     ngOnInit(): void {
@@ -25,7 +27,6 @@ export class VaultsListComponent implements OnInit {
         this.vaultService.GetVaults()
             .subscribe(res => {
                 this.vaults = res;
-
             }, err => {
                 this.toastrService.error(err);
             });

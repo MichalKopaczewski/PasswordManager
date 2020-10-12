@@ -14,5 +14,6 @@ namespace PasswordManager.Application.Entries.CreateEntry
         public string Login { get; set; }
         public string Email { get; set; }
         public long VaultId { get; set; }
+        public string MasterPassword { get; set; }
     }
 }

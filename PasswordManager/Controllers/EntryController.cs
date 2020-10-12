@@ -20,6 +20,7 @@ namespace PasswordManager.Controllers
         [HttpPost("CreateEntry")]
         public async Task<ActionResult> CreateEntry([FromBody] CreateEntryCommand command)
         {
+            command.MasterPassword = Request.Headers["masterPassword"];
             var a = await Mediator.Send(command);
             return Ok(a);
         }
@@ -27,6 +28,7 @@ namespace PasswordManager.Controllers
         [HttpPost("UpdateEntry")]
         public async Task<ActionResult> UpdateEntry([FromBody] UpdateEntryCommand command)
         {
+            command.MasterPassword = Request.Headers["masterPassword"];
             var a = await Mediator.Send(command);
             return Ok(a);
         }
@@ -34,6 +36,7 @@ namespace PasswordManager.Controllers
         [HttpPost("DeleteEntry")]
         public async Task<ActionResult> DeleteEntry([FromBody] DeleteEntryCommand command)
         {
+            command.MasterPassword = Request.Headers["masterPassword"];
             var a = await Mediator.Send(command);
             return Ok(a);
         }
@@ -41,7 +44,7 @@ namespace PasswordManager.Controllers
         [HttpGet("GetEntry/{entryId}")]
         public async Task<ActionResult<EntryDetailVM>> GetEntry(long entryId)
         {
-            var a = await Mediator.Send(new EntryDetailQuery() { EntryId = entryId});
+            var a = await Mediator.Send(new EntryDetailQuery() { EntryId = entryId,MasterPassword= Request.Headers["masterPassword"] });
             return Ok(a);
         }
     }

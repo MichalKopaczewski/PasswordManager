@@ -11,6 +11,6 @@ namespace PasswordManager.Domain.Entities
         public long Id { get; set; }
         public string Name { get; set; }
         public string MasterPassword { get; set; }
-
+        public string MasterSalt { get;  set; }
     }
 }

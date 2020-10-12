@@ -2,6 +2,7 @@
 
 using Microsoft.EntityFrameworkCore;
 
+using PasswordManager.Application.Interfaces;
 using PasswordManager.Infrastructure.Persistance;
 using PasswordManager.Infrastructure.Services;
 
@@ -16,15 +17,22 @@ namespace PasswordManager.Application.Vaults.RemoveVault
 {
     public class RemoveVaultCommandHandler : BaseRequestHandler, IRequestHandler<RemoveVaultCommand>
     {
-        public RemoveVaultCommandHandler(PasswordManagerContext context,UserResolverService userResolverService) : base(context)
+        public RemoveVaultCommandHandler(PasswordManagerContext context,UserResolverService userResolverService,IVaultService vaultService) : base(context)
         {
             UserResolverService = userResolverService;
+            VaultService = vaultService;
         }
 
         public UserResolverService UserResolverService { get; }
+        public IVaultService VaultService { get; }
 
         public async Task<Unit> Handle(RemoveVaultCommand request, CancellationToken cancellationToken)
         {
+
+            if (!VaultService.ValidateVaultPassword(request.VaultId, request.MasterPassword))
+            {
+                throw new Exception("Podano nie poprawne hasło");
+            }
             var vault = await (from v in PmContext.Vaults
                          where v.Username == UserResolverService.GetUsername() && v.Id == request.VaultId
                          select v).FirstOrDefaultAsync();

@@ -14,5 +14,6 @@ namespace PasswordManager.Application.Entries.UpdateEntry
         public string Password { get; set; }
         public string Login { get; set; }
         public string Email { get; set; }
+        public string MasterPassword { get;  set; }
     }
 }

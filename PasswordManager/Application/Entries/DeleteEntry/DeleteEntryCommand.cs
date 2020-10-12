@@ -10,5 +10,6 @@ namespace PasswordManager.Application.Entries.DeleteEntry
     public class DeleteEntryCommand : IRequest
     {
         public long EntryId { get; set; }
+        public string MasterPassword { get; set; }
     }
 }

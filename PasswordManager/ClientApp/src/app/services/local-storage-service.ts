@@ -4,6 +4,9 @@ import { LOCAL_STORAGE, StorageService } from 'angular-webstorage-service';
 export class LocalStorageService {
 
     static readonly TOKEN = 'token';
+    static readonly PASSWORD = 'password';
+    static readonly ACTIVE_VAULT = 'active_vault';
+    static readonly PASSWORD_KEY= 'password_key';
     constructor(@Inject(LOCAL_STORAGE) private storage: StorageService) {
 
     }
@@ -22,6 +25,9 @@ export class LocalStorageService {
         this.storage.remove(key);
     }
     public clearLocalStorage(): void {
+        this.storage.remove(LocalStorageService.PASSWORD);
+        this.storage.remove(LocalStorageService.ACTIVE_VAULT);
+        this.storage.remove(LocalStorageService.PASSWORD_KEY);
         this.storage.remove(LocalStorageService.TOKEN);
         //TODO dodać usuwanie po wylogowaniu z aplikacji
     }

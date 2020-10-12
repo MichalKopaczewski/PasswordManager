@@ -33,6 +33,9 @@ import { VaultsListComponent } from './vaults/vaults-list-component/vaults-list.
 import { VaultNewComponent } from './vaults/vault-new/vault-new.component';
 import { VaultEntriesComponent } from './vaults/vault-entries/vault-entries.component';
 import { EntryNewUpdateComponent } from './vaults/entry-new-update/entry-new-update.component';
+import { EncryptService } from './services/encrypt.service';
+import { PasswordModalComponent } from './modals/password-modal.component';
+import { ErrorInterceptor, ErrorInterceptorProvider } from './error.interceptor';
 // export function tokenGetter() {
 //   return localStorage.getItem("token");
 // }
@@ -53,11 +56,12 @@ export function tokenGetter(): string {
     UserListComponent,
     UsersDetailsComponent,
     UserUpdateComponent,
+    PasswordModalComponent,
     ConfirmationDialogComponent,
     VaultsListComponent,
     VaultNewComponent,
     VaultEntriesComponent,
-    EntryNewUpdateComponent
+    EntryNewUpdateComponent,
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -98,10 +102,14 @@ export function tokenGetter(): string {
     UserDetailResolver,
     ConfirmationDialogService,
     EntryService,
-    VaultService
+    ErrorInterceptorProvider,
+    VaultService,
+    EncryptService
+    
   ],
   entryComponents: [
-    ConfirmationDialogComponent
+    ConfirmationDialogComponent,
+    PasswordModalComponent
   ],
   bootstrap: [AppComponent]
 })

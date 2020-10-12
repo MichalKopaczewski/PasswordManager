@@ -114,6 +114,9 @@ namespace PasswordManager.Infrastructure.Persistance.Migrations
                     b.Property<string>("MasterPassword")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("MasterSalt")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Name")
                         .HasColumnType("nvarchar(max)");
 
